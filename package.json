@@ -1,7 +1,7 @@
 {
   "name": "eth-gaming",
   "version": "1.0.0",
-  "description": "Ethereum gaming course from IvanOnTech Academy",
+  "description": "A simple ERC1155 game. Ethereum gaming course from IvanOnTech Academy",
   "main": "index.js",
   "scripts": {
     "start": "webpack serve --config webpack/webpack.dev.js",
@@ -12,8 +12,8 @@
     "format:write": "prettier --write src/scripts/**"
   },
   "author": {
-    "name": "Yannick Deubel",
-    "url": "https://github.com/yandeu"
+    "name": "REGO350",
+    "url": "https://github.com/REGO350/eth-game"
   },
   "template": {
     "name": "phaser-project-template",
