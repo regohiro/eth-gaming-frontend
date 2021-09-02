@@ -1,4 +1,5 @@
 import { Types } from 'phaser'
+import { mintAfterGame } from '../interactions/eth'
 
 export default class MainScene extends Phaser.Scene {
   cursors: Phaser.Types.Input.Keyboard.CursorKeys
@@ -7,10 +8,11 @@ export default class MainScene extends Phaser.Scene {
   coinTimer: Phaser.Time.TimerEvent
   score: number = 0
   scoreText: Phaser.GameObjects.Text
-  secondsLeft: number = 60
+  secondsLeft: number = 10
   timeLeftTimer: Phaser.Time.TimerEvent
   timeLeftText: Phaser.GameObjects.Text
   gameOver: boolean = false
+  coinsSent: boolean = false
 
   constructor() {
     super({ key: 'MainScene' })
@@ -115,7 +117,7 @@ export default class MainScene extends Phaser.Scene {
       //@ts-ignore
       coin.disableBody(true, true)
       this.score++
-      this.scoreText.setText("Bitcoin Bag: " + this.score);
+      this.scoreText.setText('Bitcoin Bag: ' + this.score)
     }
 
     coins.children.iterate(coin => {
@@ -128,12 +130,18 @@ export default class MainScene extends Phaser.Scene {
   }
 
   updateTimeLeft() {
-    if (this.gameOver == true) return
-    this.secondsLeft -= 1
-    this.timeLeftText.setText(this.secondsLeft + " seconds left");
-    if (this.secondsLeft <= 0) {
-      this.physics.pause()
-      this.gameOver = true
+    if (this.gameOver && !this.coinsSent) {
+      mintAfterGame(this.score)
+      this.coinsSent = true
+    }else{
+      this.secondsLeft -= 1
+      this.timeLeftText.setText(this.secondsLeft + ' seconds left')
+  
+      if (this.secondsLeft <= 0) {
+        this.physics.pause()
+        this.timeLeftText.setText('0 seconds left')
+        this.gameOver = true
+      }
     }
   }
 
