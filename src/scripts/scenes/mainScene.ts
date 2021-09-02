@@ -6,6 +6,11 @@ export default class MainScene extends Phaser.Scene {
   crates: Phaser.Physics.Arcade.StaticGroup
   coinTimer: Phaser.Time.TimerEvent
   score: number = 0
+  scoreText: Phaser.GameObjects.Text
+  secondsLeft: number = 60
+  timeLeftTimer: Phaser.Time.TimerEvent
+  timeLeftText: Phaser.GameObjects.Text
+  gameOver: boolean = false
 
   constructor() {
     super({ key: 'MainScene' })
@@ -72,10 +77,21 @@ export default class MainScene extends Phaser.Scene {
     //Setup cursor
     this.cursors = this.input.keyboard.createCursorKeys()
 
+    //Set text
+    this.scoreText = this.add.text(16, 16, `Bitcoin Bag: ${this.score}`, { fontSize: '32px', color: '#000' })
+    this.timeLeftText = this.add.text(16, 66, `${this.secondsLeft} seconds left`, { fontSize: '32px', color: '#f00' })
+
     //Set timer
     this.coinTimer = this.time.addEvent({
       delay: Phaser.Math.Between(1000, 3000),
       callback: this.generateCoins,
+      callbackScope: this,
+      repeat: -1
+    })
+
+    this.timeLeftTimer = this.time.addEvent({
+      delay: 1000,
+      callback: this.updateTimeLeft,
       callbackScope: this,
       repeat: -1
     })
@@ -97,9 +113,9 @@ export default class MainScene extends Phaser.Scene {
       coin: Types.Physics.Arcade.GameObjectWithBody
     ) => {
       //@ts-ignore
-      coin.disableBody(true, true);
-      this.score++;
-      console.log(`Score: ${this.score}`);
+      coin.disableBody(true, true)
+      this.score++
+      this.scoreText.setText("Bitcoin Bag: " + this.score);
     }
 
     coins.children.iterate(coin => {
@@ -109,6 +125,16 @@ export default class MainScene extends Phaser.Scene {
 
     this.physics.add.collider(this.crates, coins)
     this.physics.add.overlap(this.knight, coins, collectCoin, undefined, this)
+  }
+
+  updateTimeLeft() {
+    if (this.gameOver == true) return
+    this.secondsLeft -= 1
+    this.timeLeftText.setText(this.secondsLeft + " seconds left");
+    if (this.secondsLeft <= 0) {
+      this.physics.pause()
+      this.gameOver = true
+    }
   }
 
   update() {
