@@ -17,5 +17,13 @@ export async function getUserItems() {
     const itembalance = await gameItem.balanceOf(account, i+1);
     itemsBalance[i] = fromBN(itembalance);
   }
-  console.table(itemsBalance);
+
+  const coinGenerationIntervalMultiplier = Math.pow(0.9, itemsBalance[0]);
+  const playerSpeedMultiplier = Math.pow(1.1, itemsBalance[1]);
+  const gameSecondMultiplier = Math.pow(1.1, itemsBalance[1]);
+
+  return {
+    coinGenerationIntervalMultiplier, playerSpeedMultiplier, gameSecondMultiplier
+  }
+
 }

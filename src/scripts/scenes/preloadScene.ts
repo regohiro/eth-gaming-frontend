@@ -18,8 +18,8 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.image("bitcoin", "../../assets/bitcoin.png");
   }
 
-  create() {
-    getUserItems()
-    this.scene.start('MainScene')
+  async create() {
+    const data = await getUserItems()
+    this.scene.start('MainScene', data);
   }
 }
