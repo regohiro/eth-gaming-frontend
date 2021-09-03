@@ -1,6 +1,5 @@
 import { Types } from 'phaser'
 import { mintAfterGame } from '../interactions/token'
-import { buyItem } from '../interactions/marketplace'
 
 export default class MainScene extends Phaser.Scene {
   cursors: Phaser.Types.Input.Keyboard.CursorKeys

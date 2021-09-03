@@ -1,3 +1,5 @@
+import { getUserItems } from "../interactions/item";
+
 export default class PreloadScene extends Phaser.Scene {
   constructor() {
     super({ key: 'PreloadScene' })
@@ -17,6 +19,7 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   create() {
+    getUserItems()
     this.scene.start('MainScene')
   }
 }
