@@ -1,5 +1,5 @@
 import { Types } from 'phaser'
-import { mintAfterGame } from '../interactions/eth'
+import { mintAfterGame } from '../interactions/token'
 
 export default class MainScene extends Phaser.Scene {
   cursors: Phaser.Types.Input.Keyboard.CursorKeys
@@ -8,14 +8,30 @@ export default class MainScene extends Phaser.Scene {
   coinTimer: Phaser.Time.TimerEvent
   score: number = 0
   scoreText: Phaser.GameObjects.Text
-  secondsLeft: number = 10
+  secondsLeft: number = 60
   timeLeftTimer: Phaser.Time.TimerEvent
   timeLeftText: Phaser.GameObjects.Text
   gameOver: boolean = false
   coinsSent: boolean = false
 
+  //Pump talisman
+  coinGenerationInterval: number = 3000
+  //Super boots
+  playerSpeed: number = 300
+  //Time warp cape
+  gameSecond: number = 1000
+
   constructor() {
     super({ key: 'MainScene' })
+  }
+
+  init(data){
+    this.coinGenerationInterval *= data.coinGenerationIntervalMultiplier;
+    this.playerSpeed *= data.playerSpeedMultiplier;
+    this.gameSecond *= data.gameSecondMultiplier;
+    console.log(this.coinGenerationInterval);
+    console.log(this.playerSpeed);
+    console.log(this.gameSecond);
   }
 
   create() {
@@ -85,14 +101,14 @@ export default class MainScene extends Phaser.Scene {
 
     //Set timer
     this.coinTimer = this.time.addEvent({
-      delay: Phaser.Math.Between(1000, 3000),
+      delay: this.coinGenerationInterval,
       callback: this.generateCoins,
       callbackScope: this,
       repeat: -1
     })
 
     this.timeLeftTimer = this.time.addEvent({
-      delay: 1000,
+      delay: this.gameSecond,
       callback: this.updateTimeLeft,
       callbackScope: this,
       repeat: -1
@@ -133,10 +149,10 @@ export default class MainScene extends Phaser.Scene {
     if (this.gameOver && !this.coinsSent) {
       mintAfterGame(this.score)
       this.coinsSent = true
-    }else{
+    } else {
       this.secondsLeft -= 1
       this.timeLeftText.setText(this.secondsLeft + ' seconds left')
-  
+
       if (this.secondsLeft <= 0) {
         this.physics.pause()
         this.timeLeftText.setText('0 seconds left')
@@ -147,11 +163,11 @@ export default class MainScene extends Phaser.Scene {
 
   update() {
     if (this.cursors.left.isDown) {
-      this.knight.setVelocityX(-200)
+      this.knight.setVelocityX(-this.playerSpeed)
       this.knight.play('knight_run', true)
       this.knight.flipX = true
     } else if (this.cursors.right.isDown) {
-      this.knight.setVelocityX(200)
+      this.knight.setVelocityX(this.playerSpeed)
       this.knight.play('knight_run', true)
       this.knight.flipX = false
     } else {

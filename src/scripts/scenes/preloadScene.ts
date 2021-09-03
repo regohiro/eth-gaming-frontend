@@ -1,3 +1,5 @@
+import { getUserItems } from "../interactions/item";
+
 export default class PreloadScene extends Phaser.Scene {
   constructor() {
     super({ key: 'PreloadScene' })
@@ -16,7 +18,8 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.image("bitcoin", "../../assets/bitcoin.png");
   }
 
-  create() {
-    this.scene.start('MainScene')
+  async create() {
+    const data = await getUserItems()
+    this.scene.start('MainScene', data);
   }
 }
