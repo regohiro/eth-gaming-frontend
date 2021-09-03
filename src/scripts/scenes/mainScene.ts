@@ -1,5 +1,6 @@
 import { Types } from 'phaser'
-import { mintAfterGame } from '../interactions/eth'
+import { mintAfterGame } from '../interactions/token'
+import { buyItem } from '../interactions/marketplace'
 
 export default class MainScene extends Phaser.Scene {
   cursors: Phaser.Types.Input.Keyboard.CursorKeys
@@ -8,7 +9,7 @@ export default class MainScene extends Phaser.Scene {
   coinTimer: Phaser.Time.TimerEvent
   score: number = 0
   scoreText: Phaser.GameObjects.Text
-  secondsLeft: number = 10
+  secondsLeft: number = 120
   timeLeftTimer: Phaser.Time.TimerEvent
   timeLeftText: Phaser.GameObjects.Text
   gameOver: boolean = false

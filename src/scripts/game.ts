@@ -1,4 +1,5 @@
 import 'phaser'
+import { buyItem } from './interactions/marketplace'
 import MainScene from './scenes/mainScene'
 import PreloadScene from './scenes/preloadScene'
 
@@ -21,4 +22,13 @@ const config = {
 
 window.addEventListener('load', () => {
   const game = new Phaser.Game(config)
+})
+document.getElementById('btn1')?.addEventListener("click", async () => {
+  await buyItem(1);
+})
+document.getElementById('btn2')?.addEventListener("click", async () => {
+  await buyItem(2);
+})
+document.getElementById('btn3')?.addEventListener("click", async () => {
+  await buyItem(3);
 })
